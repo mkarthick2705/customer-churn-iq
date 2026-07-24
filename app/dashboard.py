@@ -81,5 +81,16 @@ if st.button("🚀 Analyze Risk Profile", use_container_width=True):
         else:
             st.success("✅ **Low Churn Risk** — High retention likelihood.")
             
+        st.divider()
+        st.subheader("🔍 Top Risk Drivers (SHAP Analysis)")
+        drivers = res_data.get("top_risk_drivers", [])
+        
+        if drivers:
+            for item in drivers:
+                direction = "Increases Risk" if item['impact'] > 0 else "Decreases Risk"
+                st.write(f"• **{item['feature']}**: Impact Score = `{item['impact']}` ({direction})")
+        else:
+            st.info("No SHAP risk drivers returned from the backend.")
+            
     except Exception as e:
         st.error(f"Could not connect to FastAPI server. Make sure FastAPI is running on port 8000!\nError: {e}")
